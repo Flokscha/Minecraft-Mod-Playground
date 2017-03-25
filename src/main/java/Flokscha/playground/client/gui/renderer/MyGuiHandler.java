@@ -75,7 +75,7 @@ public class MyGuiHandler implements IGuiHandler {
                 }
             }
             inventory.addItemStackToInventory(MR.getItemToSell().copy());
-            //DEBUG purposes only
+            // DEBUG vanilla buy.
             lastMerchantInteracted.useRecipe(MR);
         }
     }

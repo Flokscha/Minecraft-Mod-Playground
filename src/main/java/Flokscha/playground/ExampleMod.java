@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
-@Mod(modid = ExampleMod.MODID, version = ExampleMod.VERSION)
+@Mod(modid = ExampleMod.MODID, version = ExampleMod.VERSION, useMetadata = true)
 public class ExampleMod
 {
     public static final String MODID = "playground";
@@ -58,7 +58,7 @@ public class ExampleMod
     public void init(FMLInitializationEvent event)
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, MyGuiHandler.instance);
-        proxy.init();
+        proxy.init(event);
     }
 
     @EventHandler

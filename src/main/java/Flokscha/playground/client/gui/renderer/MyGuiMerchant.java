@@ -123,7 +123,6 @@ public class MyGuiMerchant extends GuiContainer {
             this.to = this.from + 4;
         } else if (p_actionPerformed_1_ != null){
             for (ItemPanel IP: panels.subList(this.from,this.to)){
-                LogHelper.info("BuyButton Number: " + IP.buyButton.id + " checked");
                 if (IP.buyButton.enabled&&IP.buyButton.equals(p_actionPerformed_1_)){
                     LogHelper.info(p_actionPerformed_1_.id + " Button Pressed!");
                     MyGuiHandler.onBuyButton(IP.MR);
@@ -276,7 +275,7 @@ public class MyGuiMerchant extends GuiContainer {
             String ButtonString = "buy";
             buyButton = new GuiButton(counter,xPos + 24 + xOffset,yPos +yOffset-4 - offset,24,16+4,ButtonString);
             buyButton.visible = true;
-            //First item
+            //First items
             that.itemRender.renderItemAndEffectIntoGUI(itemToBuy, xPos + xOffset, lvt_6_1_+yOffset - offset);
             that.itemRender.renderItemOverlays(that.fontRendererObj, itemToBuy, xPos + xOffset, lvt_6_1_+yOffset - offset);
             //second Item

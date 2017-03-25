@@ -3,6 +3,7 @@ package Flokscha.playground.Entity;
 
 import Flokscha.playground.ExampleMod;
 import Flokscha.playground.client.gui.renderer.MyGuiHandler;
+import Flokscha.playground.items.ModItems;
 import Flokscha.playground.utility.LogHelper;
 import Flokscha.playground.utility.VillagerItem;
 import Flokscha.playground.utility.VillagerUtility;
@@ -43,6 +44,7 @@ public class MyEntitiyVillager extends EntityVillager implements INpc, IMerchant
     private VillagerRegistry.VillagerProfession prof;
     private VillagerUtility VilUtil = new VillagerUtility();
     private int wealth;
+    public boolean MaxReached = false;
 
     public MyEntitiyVillager(World p_i1747_1_) {
         this(p_i1747_1_, 0);
@@ -71,7 +73,11 @@ public class MyEntitiyVillager extends EntityVillager implements INpc, IMerchant
     public boolean processInteract(EntityPlayer p_processInteract_1_, EnumHand p_processInteract_2_) {
         ItemStack itemstack = p_processInteract_1_.getHeldItem(p_processInteract_2_);
         boolean flag = itemstack.getItem() == Items.NAME_TAG;
+        boolean isStockUpgrade = itemstack.getItem() == ModItems.stockupgrade;
         if(flag) {
+            itemstack.interactWithEntity(p_processInteract_1_, this, p_processInteract_2_);
+            return true;
+        } else if (isStockUpgrade && !this.isChild() && this.buyingList != null && !this.isTrading()){
             itemstack.interactWithEntity(p_processInteract_1_, this, p_processInteract_2_);
             return true;
         } else if(!this.holdingSpawnEggOfClass(itemstack, this.getClass()) && this.isEntityAlive() && !this.isTrading() && !this.isChild()) {
@@ -102,7 +108,6 @@ public class MyEntitiyVillager extends EntityVillager implements INpc, IMerchant
     public void populateBuyingList() {
         if(this.careerId != 0 && this.careerLevel != 0) {
             ++this.careerLevel;
-            LogHelper.info("increased Villagers Level");
         } else {
             this.careerId = this.getProfessionForge().getRandomCareer(this.rand) + 1;
             this.careerLevel = 1;
@@ -122,6 +127,8 @@ public class MyEntitiyVillager extends EntityVillager implements INpc, IMerchant
                 ITradeList entityvillager$itradelist = (ITradeList)var4.next();
                 entityvillager$itradelist.addMerchantRecipe(this, this.buyingList, this.rand);
             }
+        } else {
+            this.MaxReached = true;
         }
 //        LogHelper.info(this.getProfessionForge().getRegistryName() );
 //        LogHelper.info(this.getProfessionForge().getCareer(this.careerId).getName() );
@@ -134,13 +141,18 @@ public class MyEntitiyVillager extends EntityVillager implements INpc, IMerchant
         this.livingSoundTime = -this.getTalkInterval();
         this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
 
-        if(Mr.getItemToBuy().getItem() == Items.EMERALD) {
-            this.wealth += Mr.getItemToBuy().getCount();
-        }
+//        if(Mr.getItemToBuy().getItem() == Items.EMERALD) {
+//            this.wealth += Mr.getItemToBuy().getCount();
+//        }
 
         if(Mr.getRewardsExp()) {
             this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, 5));
         }
+    }
+    public void soundAndExp(){
+        this.livingSoundTime = -this.getTalkInterval();
+        this.playSound(SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
+        this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, 15));
     }
 
     static {

@@ -58,26 +58,6 @@ public class ContainerMerchant extends Container {
         super.onCraftMatrixChanged(p_onCraftMatrixChanged_1_);
     }
 
-    public void setCurrentRecipeIndex(int p_setCurrentRecipeIndex_1_) {
-        this.merchantInventory.setCurrentRecipeIndex(p_setCurrentRecipeIndex_1_);
-        MerchantRecipe merchantRecipe = this.theMerchant.getRecipes(this.theMerchant.getCustomer()).get(p_setCurrentRecipeIndex_1_);
-        ItemStack itemToSell = merchantRecipe.getItemToSell().copy();
-        ItemStack itemToBuy = merchantRecipe.getItemToBuy().copy();
-        //sets a Placeholding Item in die Gui zum nehmen.
-//        this.merchantInventory.setInventorySlotContents(this.resultSlot.getSlotIndex(),v1);
-
-
-        //A Click is definitley a buy!
-        //onTake hat unerwünschtes Behaviour, ersetzen mit eigener Funktion
-        ItemStack v2 = resultSlot.onTake(theMerchant.getCustomer(),itemToSell);
-        LogHelper.info(v2);
-        // Theorie: If emeralds vorhanden && emeralds sind genügend vorhanden, Does Slot Trade (doTrade) ? if true reduce Emeralds und put item into slot.
-        //Actually puts the item in my Inventory
-        this.transferStackInSlot(this.theMerchant.getCustomer(),this.resultSlot.getSlotIndex());
-        this.theMerchant.finishUpBuy(merchantRecipe);
-//        LogHelper.info(this.resultSlot.getStack());
-    }
-
     public void onBuyButton(MerchantRecipe MR){
         this.detectAndSendChanges();
         this.theMerchant.finishUpBuy(MR);
